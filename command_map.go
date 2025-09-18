@@ -18,16 +18,28 @@ type LocationArea struct {
 }
 
 func fetchFromUrl(locationAreaUrl string, c *config) error {
-	res, err := http.Get(locationAreaUrl)
-	if err != nil {
-		return fmt.Errorf("error fetching %v", err)
-	}
 
-	defer res.Body.Close()
+	entry, found := c.cache.Get(locationAreaUrl)
 
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response body: %v", err)
+	var body []byte
+	if found {
+		body = entry
+	} else {
+
+		res, err := http.Get(locationAreaUrl)
+		if err != nil {
+			return fmt.Errorf("error fetching %v", err)
+		}
+
+		defer res.Body.Close()
+
+		resBody, err := io.ReadAll(res.Body)
+		if err != nil {
+			return fmt.Errorf("failed to read response body: %v", err)
+		}
+
+		body = resBody
+		c.cache.Add(locationAreaUrl, resBody)
 	}
 
 	var la LocationArea

@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/gooneraki/pokedexcli/internal/pokecache"
 )
 
 func startRepl() {
 
-	c := &config{}
+	c := &config{
+		cache: pokecache.NewCache(5 * time.Second),
+	}
 
 	reader := bufio.NewScanner(os.Stdin)
 	for {
@@ -52,6 +57,7 @@ type cliCommand struct {
 type config struct {
 	Next     string
 	Previous string
+	cache    *pokecache.Cache
 }
 
 func getCommands() map[string]cliCommand {
