@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-func fetchFromUrl(locationAreaUrl string, c *config) ([]byte, error) {
+func fetchFromUrl(url string, c *config) ([]byte, error) {
 
-	entry, found := c.cache.Get(locationAreaUrl)
+	entry, found := c.cache.Get(url)
 
 	if found {
 		return entry, nil
 	} else {
 
-		res, err := http.Get(locationAreaUrl)
+		res, err := http.Get(url)
 		if err != nil {
 			return nil, fmt.Errorf("error fetching %v", err)
 		}
@@ -26,7 +26,7 @@ func fetchFromUrl(locationAreaUrl string, c *config) ([]byte, error) {
 			return nil, fmt.Errorf("failed to read response body: %v", err)
 		}
 
-		c.cache.Add(locationAreaUrl, body)
+		c.cache.Add(url, body)
 		return body, nil
 	}
 }
