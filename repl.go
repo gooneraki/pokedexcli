@@ -60,9 +60,10 @@ type cliCommand struct {
 }
 
 type config struct {
-	Next     string
-	Previous string
-	cache    *pokecache.Cache
+	Next          string
+	Previous      string
+	cache         *pokecache.Cache
+	caughtPokemon map[string]Pokemon
 }
 
 func getCommands() map[string]cliCommand {
@@ -101,6 +102,11 @@ func getCommands() map[string]cliCommand {
 			name:        "inspect <pokemon_name>",
 			description: "Inspect catched pokemon",
 			callback:    commandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Display all catched pokemons",
+			callback:    commandPokedex,
 		},
 	}
 }

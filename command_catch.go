@@ -35,6 +35,10 @@ func commandCatch(c *config, name string) error {
 	var result string
 	if rand.Float32() < oddDecimal {
 		result = "was caught"
+		if c.caughtPokemon == nil {
+			c.caughtPokemon = make(map[string]Pokemon)
+		}
+		c.caughtPokemon[pokemon.Name] = pokemon
 	} else {
 		result = "escaped"
 	}
